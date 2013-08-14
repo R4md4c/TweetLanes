@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.Calendar;
@@ -40,6 +41,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Date;
+
+import com.android.volley.toolbox.ImageLoader.ImageCache;
 
 import android.app.Activity;
 import android.content.Context;
@@ -64,7 +67,7 @@ import android.widget.ListView;
  *
  * @author mariotaku
  */
-public class LazyImageLoader {
+public class LazyImageLoader implements ImageCache{
 
     private final MemoryCache mMemoryCache;
     private final Context mContext;
@@ -315,6 +318,43 @@ public class LazyImageLoader {
 
     }
 
+    @Override
+	public Bitmap getBitmap(String url) {
+		
+		/* The url supplied in this method is prepended with a "#W0#H0"
+		*  I have no idea why so this is a simple hack to solve this issue. */
+		url = url.replace("#W0#H0", "");
+		URL imageUrl = Util.parseURL(url);
+		Bitmap bitmap = mMemoryCache.get(imageUrl, mFileCache);
+		if (bitmap != null) return bitmap;
+		
+		final File f = mFileCache.getFile(imageUrl);
+		if (f == null) return null;
+        // from SD cache
+		bitmap = decodeFile(f);
+        if (bitmap != null) {
+        	mMemoryCache.put(imageUrl, bitmap);
+        	return bitmap;
+        }
+        
+		return null;
+	}
+
+	@Override
+	public void putBitmap(String url, Bitmap bitmap) {
+		try {
+			/* The url supplied in this method is prepended with a "#W0#H0"
+			*  I have no idea why so this is a simple hack to solve this issue. */
+			url = url.replace("#W0#H0", "");
+			URL imageUrl = new URL(url);
+			mMemoryCache.put(imageUrl, bitmap);
+			mFileCache.saveFile(bitmap, imageUrl);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
     private class ImageLoader implements Runnable {
 
         private final ImageToLoad mImageToLoad;
@@ -517,5 +557,7 @@ public class LazyImageLoader {
             }
         }
     }
+
+	
 
 }

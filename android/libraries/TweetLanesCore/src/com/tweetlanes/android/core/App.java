@@ -177,7 +177,7 @@ public class App extends Application {
     
     public ImageLoader getVolleyImageLoader() {
     	if (mVolleyImageLoader == null) {
-    		mVolleyImageLoader = new ImageLoader(getRequestQueue(), new UrlLruCache(getBaseContext(), UrlLruCache.getDefaultLruCacheSize()));
+    		mVolleyImageLoader = new ImageLoader(getRequestQueue(), getProfileImageLoader());
     	}
     	return mVolleyImageLoader;
     }
