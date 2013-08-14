@@ -38,6 +38,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.tweetlanes.android.core.AppSettings;
 import com.tweetlanes.android.core.Constant;
 import com.tweetlanes.android.core.Constant.SystemEvent;
@@ -1693,6 +1694,11 @@ public final class TweetFeedFragment extends BaseLaneFragment {
                 public LazyImageLoader getPreviewImageLoader() {
                     return mPreviewImageLoader;
                 }
+
+				@Override
+				public ImageLoader getVolleyImageLoader() {
+					return getApp().getVolleyImageLoader();
+				}
 
             };
 

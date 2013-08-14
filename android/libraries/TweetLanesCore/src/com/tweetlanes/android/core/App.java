@@ -27,11 +27,15 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.tweetlanes.android.core.Constant.SystemEvent;
 import com.tweetlanes.android.core.model.AccountDescriptor;
 import com.tweetlanes.android.core.model.LaneDescriptor;
 import com.tweetlanes.android.core.util.LazyImageLoader;
 import com.tweetlanes.android.core.widget.urlimageviewhelper.UrlImageViewHelper;
+import com.tweetlanes.android.core.widget.urlimageviewhelper.UrlLruCache;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +59,9 @@ public class App extends Application {
     private static String mAppVersionName;
     private static boolean mActionLauncherInstalled;
 
+    private RequestQueue mRequestQueue = null;
+    private ImageLoader mVolleyImageLoader = null;
+    
     public static String getAppVersionName() {
         return mAppVersionName;
     }
@@ -161,6 +168,19 @@ public class App extends Application {
         return getCurrentAccount().getAccountKey();
     }
 
+    public RequestQueue getRequestQueue() {
+    	if (mRequestQueue == null) {
+    		mRequestQueue = Volley.newRequestQueue(this.getBaseContext());
+    	}
+    	return mRequestQueue;
+    }
+    
+    public ImageLoader getVolleyImageLoader() {
+    	if (mVolleyImageLoader == null) {
+    		mVolleyImageLoader = new ImageLoader(getRequestQueue(), new UrlLruCache(getBaseContext(), UrlLruCache.getDefaultLruCacheSize()));
+    	}
+    	return mVolleyImageLoader;
+    }
     public ArrayList<LaneDescriptor> getProfileLaneDefinitions() {
         return mProfileLaneDefinitions;
     }

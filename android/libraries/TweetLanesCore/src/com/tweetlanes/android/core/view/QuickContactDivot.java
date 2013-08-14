@@ -10,10 +10,11 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.tweetlanes.android.core.AppSettings;
 import com.tweetlanes.android.core.R;
 
-public class QuickContactDivot extends ImageView implements Divot {
+public class QuickContactDivot extends NetworkImageView implements Divot {
 
     private Drawable mDrawable;
     private int mDrawableIntrinsicWidth;

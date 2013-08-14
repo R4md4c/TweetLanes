@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ViewSwitcher;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.tweetlanes.android.core.R;
 import com.tweetlanes.android.core.util.LazyImageLoader;
 import com.tweetlanes.android.core.widget.pulltorefresh.PullToRefreshBase.OnRefreshListener;
@@ -334,6 +335,11 @@ public final class TweetSpotlightFragment extends BaseLaneFragment {
                 public LazyImageLoader getPreviewImageLoader() {
                     return null;
                 }
+
+				@Override
+				public ImageLoader getVolleyImageLoader() {
+					return getApp().getVolleyImageLoader();
+				}
 
             };
 

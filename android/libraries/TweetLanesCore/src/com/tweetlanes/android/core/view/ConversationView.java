@@ -31,6 +31,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.tweetlanes.android.core.App;
 import com.tweetlanes.android.core.R;
 import com.tweetlanes.android.core.util.LazyImageLoader;
 
@@ -218,6 +220,12 @@ public class ConversationView extends LinearLayout {
             public LazyImageLoader getPreviewImageLoader() {
                 return mCallbacks.getPreviewImageLoader();
             }
+
+			@Override
+			public ImageLoader getVolleyImageLoader() {
+				App app = (App) getContext().getApplicationContext();
+				return app.getVolleyImageLoader();
+			}
 
         };
 

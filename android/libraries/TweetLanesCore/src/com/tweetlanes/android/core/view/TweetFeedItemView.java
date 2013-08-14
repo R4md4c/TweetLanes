@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.tweetlanes.android.core.AppSettings;
 import com.tweetlanes.android.core.AppSettings.StatusSize;
 import com.tweetlanes.android.core.Constant;
@@ -84,6 +85,8 @@ public class TweetFeedItemView extends LinearLayout {
         public LazyImageLoader getProfileImageLoader();
 
         public LazyImageLoader getPreviewImageLoader();
+        
+        public ImageLoader getVolleyImageLoader();
     }
 
     /*
@@ -318,13 +321,13 @@ public class TweetFeedItemView extends LinearLayout {
             if (profileImageUrl != null) {
 
                 if (AppSettings.get().downloadFeedImages()) {
-
-                    LazyImageLoader profileImageLoader = callbacks
+                	mAvatar.setImageUrl(profileImageUrl, callbacks.getVolleyImageLoader());
+                    /*LazyImageLoader profileImageLoader = callbacks
                             .getProfileImageLoader();
                     if (profileImageLoader != null) {
 
                         profileImageLoader.displayImage(profileImageUrl, mAvatar);
-                    }
+                    }*/
                 }
 
                 mAvatar.setOnClickListener(new OnClickListener() {
